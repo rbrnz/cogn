@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+    image: postgres:9.4
+    volumes:
+      - cogn_db:/var/lib/postgresql/data
+      - ${PWD}/docker/postgres:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+  cogn:
+    build: ./cogn
+    volumes:
+      - ${PWD}/:/src
+    ports:
+      - "8000:8000"
+      - "6800:6800"
+    links:
+      - db
+    command: tail -F anything
+volumes:
+  cogn_db:
